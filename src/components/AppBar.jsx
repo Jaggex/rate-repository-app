@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import { Link, useNavigate } from 'react-router-native';
 import AppBarTab from './AppBarTab';
@@ -25,7 +25,7 @@ const AppBar = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.tabContainer}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabContainer}>
         <Link to="/" style={styles.tab}>
           <AppBarTab onPress={() => navigate('/')}>
             Repositories
@@ -36,7 +36,7 @@ const AppBar = () => {
             Sign in
           </AppBarTab>
         </Link>
-      </View>
+      </ScrollView>
     </View>
   );
 };
