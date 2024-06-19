@@ -40,4 +40,3 @@ const Text = ({ color, fontSize, fontWeight, style, ...props }) => {
 };
 
 export default Text;
-
