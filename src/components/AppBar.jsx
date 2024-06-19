@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
+import { Link, useNavigate } from 'react-router-native';
 import AppBarTab from './AppBarTab';
 
 const styles = StyleSheet.create({
@@ -14,13 +15,27 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
   },
+  tab: {
+    marginHorizontal: 10,
+  },
 });
 
 const AppBar = () => {
+  const navigate = useNavigate();
+
   return (
     <View style={styles.container}>
       <View style={styles.tabContainer}>
-        <AppBarTab text="Repositories" />
+        <Link to="/" style={styles.tab}>
+          <AppBarTab onPress={() => navigate('/')}>
+            Repositories
+          </AppBarTab>
+        </Link>
+        <Link to="/signin" style={styles.tab}>
+          <AppBarTab onPress={() => navigate('/signin')}>
+            Sign in
+          </AppBarTab>
+        </Link>
       </View>
     </View>
   );
