@@ -3,6 +3,7 @@ import { View, StyleSheet, TextInput, Pressable } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Text from './Text'; // Use your custom Text component
+import useSignIn from '../hooks/useSignIn';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,8 +47,21 @@ const validationSchema = Yup.object().shape({
 });
 
 const SignIn = () => {
-  const onSubmit = (values) => {
-    console.log(values);
+  const [signIn] = useSignIn();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      if (data && data.authenticate && data.authenticate.accessToken) {
+        console.log('Access Token:', data.authenticate.accessToken);
+      } else {
+        console.log('No access token returned');
+      }
+    } catch (e) {
+      console.log('Error during sign in:', e);
+    }
   };
 
   return (
