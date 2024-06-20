@@ -1,8 +1,11 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView, Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import { Link, useNavigate } from 'react-router-native';
-import AppBarTab from './AppBarTab';
+import { useQuery, useApolloClient } from '@apollo/client';
+import { ME } from '../graphql/queries';
+import useAuthStorage from '../hooks/useAuthStorage';
+import Text from './Text';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,25 +24,41 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const { data } = useQuery(ME);
+  const authStorage = useAuthStorage();
+  const apolloClient = useApolloClient();
   const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await authStorage.removeAccessToken();
+    await apolloClient.resetStore();
+    navigate('/signin');
+  };
 
   return (
     <View style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabContainer}>
         <Link to="/" style={styles.tab}>
-          <AppBarTab onPress={() => navigate('/')}>
+          <Text fontSize="subheading" fontWeight="bold" color="white">
             Repositories
-          </AppBarTab>
+          </Text>
         </Link>
-        <Link to="/signin" style={styles.tab}>
-          <AppBarTab onPress={() => navigate('/signin')}>
-            Sign in
-          </AppBarTab>
-        </Link>
+        {data?.me ? (
+          <Pressable onPress={handleSignOut} style={styles.tab}>
+            <Text fontSize="subheading" fontWeight="bold" color="white">
+              Sign out
+            </Text>
+          </Pressable>
+        ) : (
+          <Link to="/signin" style={styles.tab}>
+            <Text fontSize="subheading" fontWeight="bold" color="white">
+              Sign in
+            </Text>
+          </Link>
+        )}
       </ScrollView>
     </View>
   );
 };
 
 export default AppBar;
-
