@@ -57,11 +57,18 @@ const AppBar = () => {
             </Pressable>
           </>
         ) : (
-          <Link to="/signin" style={styles.tab} component={Pressable}>
-            <Text fontSize="subheading" fontWeight="bold" color="white">
-              Sign In
-            </Text>
-          </Link>
+          <>
+            <Link to="/signin" style={styles.tab} component={Pressable}>
+              <Text fontSize="subheading" fontWeight="bold" color="white">
+                Sign In
+              </Text>
+            </Link>
+            <Link to="/signup" style={styles.tab} component={Pressable}>
+              <Text fontSize="subheading" fontWeight="bold" color="white">
+                Sign Up
+              </Text>
+            </Link>
+          </>
         )}
       </ScrollView>
     </View>
@@ -69,3 +76,4 @@ const AppBar = () => {
 };
 
 export default AppBar;
+
