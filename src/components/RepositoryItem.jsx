@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
-import Text from './Text'; // Import the custom Text component
+import Text from './Text';
 
 const styles = StyleSheet.create({
   container: {

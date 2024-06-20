@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
 import useRepositories from '../hooks/useRepositories';
 import RepositoryItem from './RepositoryItem';
@@ -18,7 +18,15 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
+  const { repositories, loading } = useRepositories();
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0366d6" />
+      </View>
+    );
+  }
 
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
