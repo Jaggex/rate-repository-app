@@ -1,14 +1,11 @@
-import React from 'react';
-import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigate } from 'react-router-native';
-import RepositoryItem from './RepositoryItem';
+import React, { useState } from 'react';
+import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
 import useRepositories from '../hooks/useRepositories';
+import RepositoryItem from './RepositoryItem';
+import ItemSeparator from './ItemSeparator';
+import OrderSelector from './OrderSelector';
 
 const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-    backgroundColor: '#e1e4e8',
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -16,26 +13,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const ItemSeparator = () => <View style={styles.separator} />;
-
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
-  const navigate = useNavigate();
+  const [orderBy, setOrderBy] = useState('CREATED_AT');
+  const [orderDirection, setOrderDirection] = useState('DESC');
+  const { repositories, loading } = useRepositories({ orderBy, orderDirection });
 
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];
+  if (loading) return <ActivityIndicator style={styles.container} />;
+
+  const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
 
   return (
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => navigate(`/repository/${item.id}`)}>
-          <RepositoryItem item={item} />
-        </TouchableOpacity>
-      )}
+      renderItem={({ item }) => <RepositoryItem item={item} />}
       keyExtractor={item => item.id}
+      ListHeaderComponent={() => (
+        <OrderSelector
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          orderDirection={orderDirection}
+          setOrderDirection={setOrderDirection}
+        />
+      )}
     />
   );
 };
