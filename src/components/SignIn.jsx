@@ -2,7 +2,8 @@ import React from 'react';
 import { View, StyleSheet, TextInput, Pressable } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import Text from './Text'; // Use your custom Text component
+import { useNavigate } from 'react-router-native';
+import Text from './Text';
 import useSignIn from '../hooks/useSignIn';
 
 const styles = StyleSheet.create({
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inputError: {
-    borderColor: '#d73a4a', // Red color for error
+    borderColor: '#d73a4a',
   },
   button: {
     backgroundColor: '#0366d6',
@@ -33,21 +34,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   errorText: {
-    color: '#d73a4a', // Red color for error text
+    color: '#d73a4a',
     marginBottom: 10,
   },
 });
 
-// Create the validation schema
 const validationSchema = Yup.object().shape({
-  username: Yup.string()
-    .required('Username is required'),
-  password: Yup.string()
-    .required('Password is required')
+  username: Yup.string().required('Username is required'),
+  password: Yup.string().required('Password is required'),
 });
 
 const SignIn = () => {
   const [signIn] = useSignIn();
+  const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     const { username, password } = values;
@@ -55,9 +54,7 @@ const SignIn = () => {
     try {
       const { data } = await signIn({ username, password });
       if (data && data.authenticate && data.authenticate.accessToken) {
-        console.log('Access Token:', data.authenticate.accessToken);
-      } else {
-        console.log('No access token returned');
+        navigate('/');
       }
     } catch (e) {
       console.log('Error during sign in:', e);
@@ -68,7 +65,7 @@ const SignIn = () => {
     <Formik
       initialValues={{ username: '', password: '' }}
       onSubmit={onSubmit}
-      validationSchema={validationSchema} // Integrate the validation schema
+      validationSchema={validationSchema}
     >
       {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
         <View style={styles.container}>
