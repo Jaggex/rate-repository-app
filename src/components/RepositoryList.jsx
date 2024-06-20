@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
-import useRepositories from '../hooks/useRepositories';
+import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import RepositoryItem from './RepositoryItem';
+import useRepositories from '../hooks/useRepositories';
 
 const styles = StyleSheet.create({
   separator: {
@@ -18,15 +19,8 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-  const { repositories, loading } = useRepositories();
-
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0366d6" />
-      </View>
-    );
-  }
+  const { repositories } = useRepositories();
+  const navigate = useNavigate();
 
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
@@ -36,7 +30,11 @@ const RepositoryList = () => {
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem item={item} />}
+      renderItem={({ item }) => (
+        <TouchableOpacity onPress={() => navigate(`/repository/${item.id}`)}>
+          <RepositoryItem item={item} />
+        </TouchableOpacity>
+      )}
       keyExtractor={item => item.id}
     />
   );
