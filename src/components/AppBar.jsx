@@ -38,21 +38,28 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabContainer}>
-        <Link to="/" style={styles.tab}>
+        <Link to="/" style={styles.tab} component={Pressable}>
           <Text fontSize="subheading" fontWeight="bold" color="white">
             Repositories
           </Text>
         </Link>
         {data?.me ? (
-          <Pressable onPress={handleSignOut} style={styles.tab}>
-            <Text fontSize="subheading" fontWeight="bold" color="white">
-              Sign out
-            </Text>
-          </Pressable>
+          <>
+            <Link to="/create-review" style={styles.tab} component={Pressable}>
+              <Text fontSize="subheading" fontWeight="bold" color="white">
+                Create Review
+              </Text>
+            </Link>
+            <Pressable onPress={handleSignOut} style={styles.tab}>
+              <Text fontSize="subheading" fontWeight="bold" color="white">
+                Sign Out
+              </Text>
+            </Pressable>
+          </>
         ) : (
-          <Link to="/signin" style={styles.tab}>
+          <Link to="/signin" style={styles.tab} component={Pressable}>
             <Text fontSize="subheading" fontWeight="bold" color="white">
-              Sign in
+              Sign In
             </Text>
           </Link>
         )}
