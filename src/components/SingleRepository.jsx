@@ -1,11 +1,12 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-native';
-import { View, StyleSheet, ActivityIndicator, Pressable } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, FlatList, Pressable } from 'react-native';
 import { GET_REPOSITORY } from '../graphql/queries';
 import RepositoryItem from './RepositoryItem';
 import Text from './Text';
 import * as Linking from 'expo-linking';
+import ReviewItem from './ReviewItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,15 +18,18 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 5,
     alignItems: 'center',
-    marginTop: 10,
-    marginRight: 10,
-    marginLeft: 10
+    margin: 15,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
   },
+  separator: {
+    height: 10,
+  },
 });
+
+const ItemSeparator = () => <View style={styles.separator} />;
 
 const SingleRepository = () => {
   const { id } = useParams();
@@ -37,17 +41,26 @@ const SingleRepository = () => {
   if (error) return <Text>Error: {error.message}</Text>;
 
   const repository = data.repository;
+  const reviews = repository.reviews.edges.map(edge => edge.node);
 
   return (
-    <View style={styles.container}>
-      <RepositoryItem item={repository} />
-      <Pressable
-        style={styles.button}
-        onPress={() => Linking.openURL(repository.url)}
-      >
-        <Text style={styles.buttonText}>Open in GitHub</Text>
-      </Pressable>
-    </View>
+    <FlatList
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ id }) => id}
+      ListHeaderComponent={() => (
+        <>
+          <RepositoryItem item={repository} />
+          <Pressable
+            style={styles.button}
+            onPress={() => Linking.openURL(repository.url)}
+          >
+            <Text style={styles.buttonText}>Open in GitHub</Text>
+          </Pressable>
+        </>
+      )}
+      ItemSeparatorComponent={ItemSeparator}
+    />
   );
 };
 
