@@ -1,34 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
 import RepositoryItem from './RepositoryItem';
+import ItemSeparator from './ItemSeparator';
+import RepositoryListHeader from './RepositoryListHeader';
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
     backgroundColor: '#e1e4e8',
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
 });
 
-const ItemSeparator = () => <View style={styles.separator} />;
+class RepositoryListContainer extends Component {
+  renderHeader = () => {
+    const { orderBy, setOrderBy, orderDirection, setOrderDirection, searchKeyword, setSearchKeyword } = this.props;
+    return (
+      <RepositoryListHeader
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
+        orderDirection={orderDirection}
+        setOrderDirection={setOrderDirection}
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+      />
+    );
+  };
 
-const RepositoryListContainer = ({ repositories }) => {
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];
+  render() {
+    const { repositories } = this.props;
+    const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
 
-  return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem item={item} />}
-      keyExtractor={item => item.id}
-    />
-  );
-};
+    return (
+      <FlatList
+        data={repositoryNodes}
+        ItemSeparatorComponent={ItemSeparator}
+        renderItem={({ item }) => <RepositoryItem item={item} />}
+        keyExtractor={item => item.id}
+        ListHeaderComponent={this.renderHeader}
+      />
+    );
+  }
+}
 
 export default RepositoryListContainer;

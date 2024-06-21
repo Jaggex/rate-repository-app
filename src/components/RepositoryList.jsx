@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { FlatList, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import useRepositories from '../hooks/useRepositories';
-import RepositoryItem from './RepositoryItem';
-import ItemSeparator from './ItemSeparator';
-import OrderSelector from './OrderSelector';
+import RepositoryListContainer from './RepositoryListContainer';
+import { useDebounce } from 'use-debounce';
 
 const styles = StyleSheet.create({
   container: {
@@ -16,26 +15,21 @@ const styles = StyleSheet.create({
 const RepositoryList = () => {
   const [orderBy, setOrderBy] = useState('CREATED_AT');
   const [orderDirection, setOrderDirection] = useState('DESC');
-  const { repositories, loading } = useRepositories({ orderBy, orderDirection });
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [debouncedSearchKeyword] = useDebounce(searchKeyword, 1500);
+  const { repositories, loading } = useRepositories({ orderBy, orderDirection, searchKeyword: debouncedSearchKeyword });
 
   if (loading) return <ActivityIndicator style={styles.container} />;
 
-  const repositoryNodes = repositories ? repositories.edges.map(edge => edge.node) : [];
-
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem item={item} />}
-      keyExtractor={item => item.id}
-      ListHeaderComponent={() => (
-        <OrderSelector
-          orderBy={orderBy}
-          setOrderBy={setOrderBy}
-          orderDirection={orderDirection}
-          setOrderDirection={setOrderDirection}
-        />
-      )}
+    <RepositoryListContainer
+      repositories={repositories}
+      orderBy={orderBy}
+      setOrderBy={setOrderBy}
+      orderDirection={orderDirection}
+      setOrderDirection={setOrderDirection}
+      searchKeyword={searchKeyword}
+      setSearchKeyword={setSearchKeyword}
     />
   );
 };
