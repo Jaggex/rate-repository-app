@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import ItemSeparator from './ItemSeparator';
 import RepositoryListHeader from './RepositoryListHeader';

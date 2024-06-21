@@ -35,6 +35,7 @@ const SingleRepository = () => {
   const { id } = useParams();
   const { data, loading, error } = useQuery(GET_REPOSITORY, {
     variables: { id },
+    fetchPolicy: 'cache-and-network',
   });
 
   if (loading) return <ActivityIndicator />;

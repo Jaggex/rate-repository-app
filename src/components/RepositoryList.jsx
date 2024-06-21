@@ -16,7 +16,7 @@ const RepositoryList = () => {
   const [orderBy, setOrderBy] = useState('CREATED_AT');
   const [orderDirection, setOrderDirection] = useState('DESC');
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [debouncedSearchKeyword] = useDebounce(searchKeyword, 1500);
+  const [debouncedSearchKeyword] = useDebounce(searchKeyword, 500);
   const { repositories, loading } = useRepositories({ orderBy, orderDirection, searchKeyword: debouncedSearchKeyword });
 
   if (loading) return <ActivityIndicator style={styles.container} />;
