@@ -5,11 +5,11 @@ import OrderSelector from './OrderSelector';
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor: 'grey',
+    backgroundColor: 'gray',
   },
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: 'grey',
     borderWidth: 1,
     paddingLeft: 8,
     backgroundColor: 'white',
