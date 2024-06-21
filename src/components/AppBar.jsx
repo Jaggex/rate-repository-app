@@ -50,6 +50,11 @@ const AppBar = () => {
                 Create Review
               </Text>
             </Link>
+            <Link to="/my-reviews" style={styles.tab} component={Pressable}>
+              <Text fontSize="subheading" fontWeight="bold" color="white">
+                My Reviews
+              </Text>
+            </Link>
             <Pressable onPress={handleSignOut} style={styles.tab}>
               <Text fontSize="subheading" fontWeight="bold" color="white">
                 Sign Out
@@ -76,4 +81,3 @@ const AppBar = () => {
 };
 
 export default AppBar;
-
